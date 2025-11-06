@@ -52,7 +52,7 @@ Here is a step-by-step walkthrough of the template's features, from front to bac
 
 ## Installation
 
-1.  Download the latest release `.apkg` file from the [Releases page](https://github.com/YOUR_USERNAME/YOUR_REPO/releases).
+1.  Download the latest release `.apkg` file from the [Releases page](https://github.com/anki-boi/True-Anki-MCQ-Note-Template/releases).
 2.  In Anki, go to `File` > `Import...` and select the downloaded `.apkg` file.
 3.  This will add the "Advanced Multiple Choice" note type to your collection. When adding new cards, select this note type.
 
