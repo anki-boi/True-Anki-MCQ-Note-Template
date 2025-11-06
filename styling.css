@@ -1,0 +1,338 @@
+/* --- ADD THIS ENTIRE BLOCK AT THE TOP --- */
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
+
+.error {
+  color: #F04A32;
+  font-weight: normal;
+  opacity: 0.5;
+}
+
+.success {
+  color: #8AC05E;
+  font-weight: bold;
+}
+
+.missed {
+  color: #F4E45F;
+  font-weight: bold;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+.card {
+  text-align: center;
+  margin: 0;
+  padding: 1px 1px 1vh 1px; /* Top, Right, Bottom, Left. Adjust 150px as needed. */
+/*  height: 95vh;  Full viewport height */
+  display: flex;
+  flex-direction: column;
+  font-family: Monospace, Menlo, baskerville, sans, 'Noto Sans Mono', monospace ;     
+  font-size: clamp(18px, 3vmin, 25px); /* Responsive base font */
+  /*background: ;*/
+  overflow: auto; /* Scroll if content overflows */
+}
+
+
+.card-content {
+  flex: 1; /* Takes remaining space */
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers content vertically */
+  
+  /* --- ADD THIS LINE --- */
+  align-items: center; /* This will center all direct children, including #choices */
+  
+  gap: 2vh; /* Spacing between elements */
+}
+
+
+
+.question {
+  font-size: clamp(20px, 4vmin, 30px); 
+  line-height: 1.4;
+  margin: 0;
+  padding: 2vh 1vw;
+  word-break: break-word; /* Prevents overflow */
+}
+
+
+
+/* Choices (flexible but constrained) */
+#choices {
+  max-height: 75vh;
+  overflow-y: auto;
+  font-size: clamp(16px, 3.5vmin, 30px);
+
+  /* --- FIXES APPLIED HERE --- */
+  width: 100%; /* Forces the container to span the full width */
+  padding: 0;   /* Removes default browser indentation */
+  margin: 0;    /* Good practice to reset margin */
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* This will now center the LI elements correctly */
+}
+
+/* Multiple choice items (responsive) */
+#choices li {
+  margin: 1vh 0;
+  padding: 2vh 4vw;
+  border-radius: 12px;
+  border: 1.2px solid rgba(253, 165, 48, 1.0);
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  cursor: pointer;
+  display: flex; 
+  align-items: center;
+  
+  /* Optional: Add a width to prevent items from being too narrow on big screens */
+  min-width: 69%;  /* Adjust as needed */
+  
+/*  max-width: 600px;  A pixel-based max is good for consistency */
+}
+
+
+
+
+
+/* Ensure the input (radio button) and text are well-aligned */
+#choices li input {
+  margin-right: 4vw; /* Added margin to separate the radio button from the text */
+  margin-left: 1vw;
+  min-width: 34px; /* Ensure the radio button itself has a minimum clickable size */
+  min-height: 34px;
+	flex-shrink: 0; /* Prevents the checkbox from shrinking */
+  /* You might need to adjust the appearance of default radio buttons */
+  /* For custom radio buttons, you'd use appearance: none and custom styling */
+}
+
+/* If you want the text itself to be more prominent */
+#choices li span { /* Assuming your choice text is wrapped in a span or similar */
+  flex-grow: 1; /* Allows the text to take up remaining space */
+  line-height: 1.4; /* Improve readability for larger text */
+}
+
+.hint {
+  margin-top: 20px;
+  font-size: 70%;
+  color: #aaa;
+}
+
+.extra {
+  font-size: clamp(14px, 2.5vmin, 18px);
+  margin: 1vh 0;
+}
+
+.back#choices input {
+  pointer-events: none;
+  max-height: 85vh; /* Prevents taking too much space */
+  overflow-y: auto; /* Scroll if too many choices */
+  font-size: clamp(16px, 3vmin, 20px);
+}
+
+p#answer {
+  border-top: 2px solid black;
+}
+
+ul {
+  display: inline-block;
+  margin-top: 0;
+}
+
+li {
+  text-align: left;
+  list-style: none;
+  margin: 10px;
+}
+
+li input {
+  margin-left: -20px;
+}
+
+#explanation {
+  display: block;
+  max-width: 600px;
+  font-size: 14px;
+  text-align: left;
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+
+.check-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+#check {
+  padding: 2px 10px;
+}
+
+/* New styles for the fixed buttons */
+.button-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  padding: 1.5vh 2vw; /* Viewport-based padding */
+/*  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.3),  Base shadow */
+/*    0 6px 12px rgba(0, 0, 0, 0.2);  Secondary shadow for depth */
+  display: flex;
+  flex-direction: column;
+  gap: 1vh; /* Viewport gap */
+  z-index: 100;
+}
+
+.big-button {
+  padding: 4vh 15vw; /* Scales with viewport */
+  font-size: clamp(16px, 2.5vh, 24px); /* Responsive font scaling */
+  width: 100%;
+  border: none;
+  background: rgba(253, 165, 48, 0.1); /* 70% opacity (0.7) */
+/*  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 6px 12px rgba(0, 0, 0, 0.2);*/
+  color: black; 
+  border-radius: 5px;
+  cursor: pointer;
+/*  transition: background-color 0.3s;*/
+}
+
+.hint-text {
+  display: block;
+  margin-top: 10px;
+  font-size: clamp(14px, 1.8vh, 18px); /* Responsive hint text */
+  color: #555;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .button-container {
+    flex-direction: row;
+    justify-content: center;
+		padding: 2vh 5vw; /* Wider padding on desktop */
+  }
+  .big-button {
+    width: auto;
+    min-width: 30vw; /* Relative to viewport width */
+    padding: 4vh 15vw;
+  }
+}
+
+/* COLOR ACCENTS FOR BOLD-ITALICS-UNDERLINE */
+b { color: #C695C6 !important; } /* BOLD STYLE */
+u { text-decoration: none; font-weight: bold; color: #6fbbbb;} /* UNDERLINE STYLE */
+i  { font-style: normal; font-weight: bold; color: IndianRed; } /* ITALICS STYLE */
+a { color: LightGray !important; text-decoration: none; font-size: 18px; font-style: normal; } /* LINK STYLE */
+
+/* FIX: Reset b, i, u styles within choice boxes */
+#choices b,
+#choices i,
+#choices u {
+  color: inherit !important; /* Inherit color from the parent (the choice text) */
+}
+
+#choices u {
+  text-decoration: underline; /* Restore the default underline */
+  font-weight: normal; /* Restore the default font weight */
+}
+
+#choices i {
+  font-style: italic; /* Restore the default italic style */
+  font-weight: normal; /* Restore the default font weight */
+}
+
+
+/* IMAGE STYLE */
+img { display: block; max-width: 100%; max-height: none; margin-left: auto; margin: 10px auto 10px auto;}
+
+/* --- ADDED STYLES FOR NEW INTERACTIVE FEATURES --- */
+
+/* Style for a selected answer choice */
+#choices li.selected {
+  background-color: rgba(253, 165, 48, .1); /* A light orange to indicate selection */
+  border-color: #FFB74D;
+  font-weight: bold;
+}
+
+/* Style for disabled (unselectable) choices when the max count is reached */
+#choices li.disabled {
+  opacity: 0.22;
+  pointer-events: none; /* Disables all click events */
+  cursor: not-allowed;
+}
+
+/* Wrapper for the new answer counter */
+.counter-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* The counter text element itself */
+#answer-counter {
+  font-size: clamp(10px, 2.5vmin, 16px);
+  font-weight: bold;
+  color: #333;
+  margin-top: 10px;
+  padding: 1px 1px;
+  border-radius: 8px;
+  background-color: transparent;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+/* The 'completion glow' effect on the counter */
+#answer-counter.glow {
+  animation: glow-effect .69s ease-out;
+}
+
+@keyframes glow-effect {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: none;
+    color: #333;
+  }
+  50% {
+    transform: scale(1.1);
+    color: #4CAF50; /* A success green for the text color */
+    text-shadow: 0 0 8px rgba(76, 175, 80, 0.7); /* Green text glow */
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.5); /* Green box glow */
+  }
+}
+
+
+/* --- Style for Social Media Links --- */
+/* The @import rule was removed from here and placed in the template HTML */
+
+.social-links {
+  text-align: center; /* Center the icons */
+  margin-top: 25px;   /* Add some space above the icons */
+  padding-top: 15px;  /* Add a little more space */
+  border-top: 1px solid #ddd; /* Add a faint line to separate them */
+}
+
+.social-links a {
+  font-size: 28px;      /* Make icons larger */
+  color: #888;         /* Set a neutral gray color */
+  text-decoration: none;/* Remove the default link underline */
+  margin: 0 12px;       /* Add space between each icon */
+  transition: color 0.2s ease-in-out; /* Smooth color change on hover */
+}
+
+/* Change color when you hover over an icon */
+.social-links a:hover {
+  color: #333; /* Darken the icon on hover */
+}

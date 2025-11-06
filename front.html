@@ -1,0 +1,210 @@
+<div class="question">{{Question}}</div>
+
+<div id="choices" class="front" style="display: none;">{{Multiple Choice}}</div>
+
+<!-- Bottom fixed button container -->
+
+<div class="button-container">
+  <button id="showChoicesBtn" class="big-button" style="display: none;">Show Choices</button>
+</div>
+
+<script>
+// v0.5.3 - https://github.com/SimonLammer/anki-persistence/blob/7107e73086189c190c4d326ef11ebbcded9a08c6/script.js
+if(void 0===window.Persistence){var _persistenceKey="github.com/SimonLammer/anki-persistence/",_defaultKey="_default";if(window.Persistence_sessionStorage=function(){var e=!1;try{"object"==typeof window.sessionStorage&&(e=!0,this.clear=function(){for(var e=0;e<sessionStorage.length;e++){var t=sessionStorage.key(e);0==t.indexOf(_persistenceKey)&&(sessionStorage.removeItem(t),e--)}},this.setItem=function(e,t){void 0==t&&(t=e,e=_defaultKey),sessionStorage.setItem(_persistenceKey+e,JSON.stringify(t))},this.getItem=function(e){return void 0==e&&(e=_defaultKey),JSON.parse(sessionStorage.getItem(_persistenceKey+e))},this.removeItem=function(e){void 0==e&&(e=_defaultKey),sessionStorage.removeItem(_persistenceKey+e)})}catch(e){}this.isAvailable=function(){return e}},window.Persistence_windowKey=function(e){var t=window[e],i=!1;"object"==typeof t&&(i=!0,this.clear=function(){t[_persistenceKey]={}},this.setItem=function(e,i){void 0==i&&(i=e,e=_defaultKey),t[_persistenceKey][e]=i},this.getItem=function(e){return void 0==e&&(e=_defaultKey),void 0==t[_persistenceKey][e]?null:t[_persistenceKey][e]},this.removeItem=function(e){void 0==e&&(e=_defaultKey),delete t[_persistenceKey][e]},void 0==t[_persistenceKey]&&this.clear()),this.isAvailable=function(){return i}},window.Persistence=new Persistence_sessionStorage,Persistence.isAvailable()||(window.Persistence=new Persistence_windowKey("py")),!Persistence.isAvailable()){var titleStartIndex=window.location.toString().indexOf("title"),titleContentIndex=window.location.toString().indexOf("main",titleStartIndex);titleStartIndex>0&&titleContentIndex>0&&titleContentIndex-titleStartIndex<10&&(window.Persistence=new Persistence_windowKey("qt"))}}
+</script>
+
+<script>
+  (function() {
+    // ===================================================================
+    // --- CONFIGURATION ---
+    // Change the values below to customize the card's behavior.
+    // ===================================================================
+
+    // Set to 'true' to show multiple choices automatically.
+    // Set to 'false' to hide them behind a "Show Choices" button.
+    const AUTO_SHOW_CHOICES = true;
+
+    // --- KEYBINDS ---
+    // Add your desired keybinds into the arrays below. Use lowercase letters.
+    // To add more keys, just add them to the list, separated by commas.
+    const KEY_SHOW_CHOICES = ['q', 'c'];     // Keys to show choices (if not automatic)
+
+    // ===================================================================
+    // --- ADVANCED INPUTS (Controllers & Gestures) ---
+    // NOTE: THESE ARE NOT TESTED YET. MADE BY AI.
+    // ... (rest of comments are unchanged) ...
+    // ===================================================================
+
+    // Helper function to check if a key is in the keybind array
+    function isKeyBound(keyPressed, keybindArray) {
+      return keybindArray.includes(keyPressed.toLowerCase());
+    }
+
+    // Parse correct answers
+    var correctAnswers = "{{Correct Answer}}".split(/<br\s*\/?>/i).filter(function(answer) {
+      return answer.trim() !== '';
+    });
+    
+    // Check if there are any choices in the Multiple Choice field
+    var choicesContent = "{{Multiple Choice}}".trim();
+    var hasChoices = choicesContent !== '' && !/^<br\s*\/?>$/i.test(choicesContent);
+    
+    // Only proceed if there are choices to show
+    if (hasChoices) {
+      if (AUTO_SHOW_CHOICES) {
+        // --- Automatically show choices ---
+        var choicesDiv = document.getElementById('choices');
+        choicesDiv.style.display = 'block';
+        
+        // Hide the button since it's not needed
+        document.getElementById('showChoicesBtn').style.display = 'none'; 
+        
+        // Process the choices right away
+        processChoices();
+      } else {
+        // --- Hide choices behind a button ---
+        var showChoicesButton = document.getElementById('showChoicesBtn');
+        showChoicesButton.style.display = 'block';
+        
+        // Add click handler for the Show Choices button
+        showChoicesButton.addEventListener('click', function() {
+          var choicesDiv = document.getElementById('choices');
+          choicesDiv.style.display = 'block';
+          this.style.display = 'none'; // Hide the button after click
+          
+          // Process the choices after they are shown
+          processChoices();
+        });
+      }
+    }
+    
+    function processChoices() {
+      // Preprocess - convert <br> to <li>
+      var choicesDiv = document.getElementById('choices');
+      if (choicesDiv && choicesDiv.className === 'front') {
+        var existingLIs = choicesDiv.querySelectorAll('li');
+        
+        if (existingLIs.length === 0) {
+          // If no <li> elements exist, process the content
+          var content = choicesDiv.innerHTML;
+          // Split content by <br> tags
+          var choices = content.split(/<br\s*\/?>/i);
+          // Clear existing content
+          choicesDiv.innerHTML = '';
+          // Create a new ul element
+          var ul = document.createElement('ul');
+          // Add each choice as an <li> element
+          choices.forEach(function(choice) {
+            if (choice.trim() !== '') {
+              var li = document.createElement('li');
+              li.innerHTML = choice.trim();
+              ul.appendChild(li);
+            }
+          });
+          // Add the ul to the choicesDiv
+          choicesDiv.appendChild(ul);
+        }
+      }
+      
+      // --- ADDED START ---
+      // Function to enable/disable choices based on the selection count
+      function updateChoiceStates() {
+        const totalCorrect = correctAnswers.length;
+
+        // This logic is only for questions with multiple correct answers
+        if (totalCorrect <= 0) {
+          return;
+        }
+        
+        const allChoiceItems = document.querySelectorAll("#choices li");
+        const selectedCount = document.querySelectorAll("#choices li input:checked").length;
+        
+        if (selectedCount >= totalCorrect) {
+          // Limit reached: disable all unselected items
+          allChoiceItems.forEach(function(item) {
+            const input = item.querySelector('input');
+            if (!input.checked) {
+              item.classList.add('disabled');
+            }
+          });
+        } else {
+          // Limit not reached: re-enable all items
+          allChoiceItems.forEach(function(item) {
+            item.classList.remove('disabled');
+          });
+        }
+      }
+      // --- ADDED END ---
+
+      var data = { answered: {}, position: [] };
+
+      function onClick(evt) {
+        evt.stopPropagation();
+        var input = evt.currentTarget.querySelector('input');
+        if (evt.target.nodeName != 'INPUT') {
+          input.checked = !input.checked;
+        }
+        data.answered[input.getAttribute('idx')] = input.checked;
+        if (Persistence.isAvailable()) {
+          Persistence.setItem(data);
+        }
+        
+        // --- ADDED START ---
+        // Check and apply selection limits after a choice is made
+        updateChoiceStates();
+        // --- ADDED END ---
+      }
+
+      var els = document.querySelectorAll("#choices li");
+      var count = els.length;
+
+      if (els.length == 0) {
+        return;
+      }
+
+      for (let i = 0; i < count; ++i) {
+        els[i].insertAdjacentHTML('afterbegin', '<input type="checkbox"> ');
+        els[i].addEventListener('click', onClick, true);
+        
+        let input = els[i].querySelector('input');
+        input.setAttribute('idx', i);
+
+        let pos = Math.floor(Math.random() * count);
+        data.position.splice(pos, 0, i);
+      }
+
+      if (Persistence.isAvailable()) {
+        Persistence.setItem(data);
+      }
+
+      // Re-order randomly
+      var ul = els[0].parentNode;
+      var li_nodes = [];
+      for (let idx = count - 1; idx >= 0; idx--) {
+        li_nodes.unshift(els[idx]);
+        ul.removeChild(els[idx]);
+      }
+      for (let idx = 0; idx < count; idx++) {
+        ul.appendChild(li_nodes[data.position[idx]]);
+      }
+    }
+
+    // ===================================================================
+    // --- KEYBINDS ---
+    // This section handles the keyboard shortcuts with multiple key support.
+    // ===================================================================
+    document.addEventListener('keydown', function(event) {
+      const keyPressed = event.key.toLowerCase();
+      
+      if (isKeyBound(keyPressed, KEY_SHOW_CHOICES)) {
+        const showChoicesBtn = document.getElementById('showChoicesBtn');
+        // Only click the button if it's currently visible
+        if (showChoicesBtn && showChoicesBtn.style.display !== 'none') {
+          showChoicesBtn.click();
+        }
+      }
+    });
+    // ===================================================================
+
+  })();
+</script

@@ -1,0 +1,160 @@
+<!-- Import Font Awesome using a <link> tag (more reliable in Anki) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+<div class="check-container"><span id="check"></span></div>
+
+<p>{{Question}}</p>
+
+{{#Multiple Choice}}
+<div id="choices" class="back">{{Multiple Choice}}</div>
+<div id="answer" hidden>{{Correct Answer}}</div>
+{{/Multiple Choice}}
+
+{{^Multiple Choice}}
+<hr>
+{{Correct Answer}}
+{{/Multiple Choice}}
+
+{{#Extra}}
+<div class="extra">{{Extra}}</div>
+{{/Extra}}
+
+<!-- Social Media Buttons Start Here -->
+<!--  <div class="social-links">
+  <a href="https://www.instagram.com/" title="Instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+  <a href="https://www.facebook.com/" title="Facebook" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+  <a href="https://www.reddit.com/user/" title="Reddit" aria-label="Reddit"><i class="fab fa-reddit"></i></a>
+</div>   -->
+<!-- Social Media Buttons End Here -->
+
+<script>
+// v0.5.3 - https://github.com/SimonLammer/anki-persistence/blob/7107e73086189c190c4d326ef11ebbcded9a08c6/script.js
+if(void 0===window.Persistence){var _persistenceKey="github.com/SimonLammer/anki-persistence/",_defaultKey="_default";if(window.Persistence_sessionStorage=function(){var e=!1;try{"object"==typeof window.sessionStorage&&(e=!0,this.clear=function(){for(var e=0;e<sessionStorage.length;e++){var t=sessionStorage.key(e);0==t.indexOf(_persistenceKey)&&(sessionStorage.removeItem(t),e--)}},this.setItem=function(e,t){void 0==t&&(t=e,e=_defaultKey),sessionStorage.setItem(_persistenceKey+e,JSON.stringify(t))},this.getItem=function(e){return void 0==e&&(e=_defaultKey),JSON.parse(sessionStorage.getItem(_persistenceKey+e))},this.removeItem=function(e){void 0==e&&(e=_defaultKey),sessionStorage.removeItem(_persistenceKey+e)})}catch(e){}this.isAvailable=function(){return e}},window.Persistence_windowKey=function(e){var t=window[e],i=!1;"object"==typeof t&&(i=!0,this.clear=function(){t[_persistenceKey]={}},this.setItem=function(e,i){void 0==i&&(i=e,e=_defaultKey),t[_persistenceKey][e]=i},this.getItem=function(e){return void 0==e&&(e=_defaultKey),void 0==t[_persistenceKey][e]?null:t[_persistenceKey][e]},this.removeItem=function(e){void 0==e&&(e=_defaultKey),delete t[_persistenceKey][e]},void 0==t[_persistenceKey]&&this.clear()),this.isAvailable=function(){return i}},window.Persistence=new Persistence_sessionStorage,Persistence.isAvailable()||(window.Persistence=new Persistence_windowKey("py")),!Persistence.isAvailable()){var titleStartIndex=window.location.toString().indexOf("title"),titleContentIndex=window.location.toString().indexOf("main",titleStartIndex);titleStartIndex>0&&titleContentIndex>0&&titleContentIndex-titleStartIndex<10&&(window.Persistence=new Persistence_windowKey("qt"))}}
+</script>
+
+<script>
+	(function () {
+	  // Preprocess - convert <br> to <li>
+	  var choicesDiv = document.getElementById('choices');
+	  if (choicesDiv && choicesDiv.className === 'back') {
+		var existingLIs = choicesDiv.querySelectorAll('li');
+		
+		if (existingLIs.length === 0) {
+		  // If no <li> elements exist, process the content
+		  var content = choicesDiv.innerHTML;
+		  // Split content by <br> tags
+		  var choices = content.split(/<br\s*\/?>/i);
+		  // Clear existing content
+		  choicesDiv.innerHTML = '';
+		  // Create a new ul element
+		  var ul = document.createElement('ul');
+		  // Add each choice as an <li> element
+		  choices.forEach(function(choice) {
+			if (choice.trim() !== '') {
+			  var li = document.createElement('li');
+			  li.innerHTML = choice.trim();
+			  ul.appendChild(li);
+			}
+		  });
+		  // Add the ul to the choicesDiv
+		  choicesDiv.appendChild(ul);
+		}
+	  }
+	  
+	  var data = { answered: {}, position: [] };
+
+	  var els = document.querySelectorAll("#choices li");
+	  var answerElement = document.querySelector("#answer");
+	  var count = els.length;
+
+		var correctAnswers = [];
+		if (answerElement) {
+		  // Convert the innerHTML to text, replacing <br> with newlines
+		  var tempDiv = document.createElement('div');
+		  tempDiv.innerHTML = answerElement.innerHTML.replace(/<br\s*\/?>/gi, '\n');
+		  var textAnswers = tempDiv.textContent || tempDiv.innerText || '';
+		  
+		  // Split by newlines and clean up
+		  correctAnswers = textAnswers.split('\n').map(function(item) {
+			return item.trim();
+		  }).filter(function(item) {
+			return item !== '';
+		  });
+		}
+
+	  for (let i = 0; i < count; ++i) {
+		els[i].insertAdjacentHTML('afterbegin', '<input type="checkbox"> ');
+	  }
+
+	  // Check if each choice matches any of the correct answers
+	  for (let idx = 0; idx < count; idx++) {
+		var choiceText = els[idx].textContent.trim();
+		// Remove the leading checkbox from the text when comparing
+		choiceText = choiceText.replace(/^\s*□\s*/, '').trim();
+		
+		if (correctAnswers.includes(choiceText)) {
+		  els[idx].querySelector('input').checked = true;
+		  els[idx].className = 'success';
+		}
+	  }
+
+	  if (!Persistence.isAvailable()) {
+		return;
+	  }
+	  
+	  data = Persistence.getItem();
+	  if (data === null) {
+		return;
+	  }
+	  
+	  Persistence.clear();
+
+	  var correct = true;
+	  // Check that user selected all correct answers and only correct answers
+	  for (let idx = 0; idx < count; idx++) {
+		var choiceText = els[idx].textContent.trim().replace(/^\s*□\s*/, '').trim();
+		var isCorrect = correctAnswers.includes(choiceText);
+		var wasSelected = !!data.answered[idx];
+		
+		// If this is a correct answer but user didn't select it, or
+		// if this is not a correct answer but user did select it
+		if ((isCorrect && !wasSelected) || (!isCorrect && wasSelected)) {
+		  correct = false;
+		}
+		
+		// Visual feedback
+		els[idx].querySelector('input').checked = wasSelected;
+		if (wasSelected) {
+		  if (isCorrect) {
+			els[idx].className = 'success';
+		  } else {
+			els[idx].className = 'error'; // Wrong selection
+		  }
+		} else if (isCorrect) {
+		  els[idx].className = 'missed'; // Missed correct answer
+		}
+	  }
+
+	  if (data.answered !== undefined && Object.keys(data.answered).length != 0) {
+		if (correct) {
+		  document.getElementById('check').innerHTML = 'Correct';
+		  document.getElementById('check').className = 'success';
+		} else {
+		  document.getElementById('check').innerHTML = 'Wrong';
+		  document.getElementById('check').className = 'error';
+		}
+	  }
+
+	  // Re-order to same order as previous page
+	  var ul = els[0].parentNode;
+	  var li_nodes = [];
+	  for (let idx = count - 1; idx >= 0; idx--) {
+		li_nodes.unshift(els[idx]);
+		ul.removeChild(els[idx]);
+	  }
+	  for (let idx = 0; idx < count; idx++) {
+		ul.appendChild(li_nodes[data.position[idx]]);
+	  }
+	})();
+</script>
