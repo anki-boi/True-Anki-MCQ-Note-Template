@@ -20,9 +20,35 @@ This template is designed to be highly configurable directly within the Anki car
 
 ## Preview
 
-*(A GIF demonstrating the dynamic choice disabling feature in action would be perfect here!)*
+Here is a step-by-step walkthrough of the template's features, from front to back.
 
-
+<table>
+  <!-- First Row of Images -->
+  <tr>
+    <td align="center"><strong>1. Front View</strong></td>
+    <td align="center"><strong>2. Choices Shown</strong></td>
+    <td align="center"><strong>3. Selecting Answers</strong></td>
+  </tr>
+  <tr>
+    <td><img src="./assets/1-front-view.png" alt="Front of the card showing the question and Show Choices button"></td>
+    <td><img src="./assets/2-choices-shown.png" alt="Multiple choice options are displayed below the question"></td>
+    <td><img src="./assets/3-selecting-answers.png" alt="User actively selecting an answer from the list"></td>
+  </tr>
+  
+  <!-- Second Row of Images -->
+  <tr>
+    <td align="center"><strong>4. Selection Limit Reached</strong></td>
+    <td align="center"><strong>5. Correct Feedback</strong></td>
+    <td align="center"><strong>6. Incorrect Feedback</strong></td>
+    <td align="center"><strong>7. Easy Editing</strong></td>
+  </tr>
+  <tr>
+    <td><img src="./assets/4-limit-reached.png" alt="Unselected choices are disabled after the maximum is selected"></td>
+    <td><img src="./assets/5-back-correct.png" alt="Back of card showing a correct selection"></td>
+    <td><img src="./assets/6-back-wrong.png" alt="Back of card showing an incorrect selection and the missed answer"></td>
+    <td><img src="./assets/7-card-editor-view.png" alt="Anki's card editor showing the note type's fields"></td>
+  </tr>
+</table>
 
 ## Installation
 
