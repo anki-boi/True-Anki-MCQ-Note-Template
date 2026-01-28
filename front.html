@@ -40,20 +40,41 @@ if(void 0===window.Persistence){var _persistenceKey="github.com/SimonLammer/anki
       return keybindArray.includes(keyPressed.toLowerCase());
     }
 
+    // --- ADDED THIS FUNCTION ---
+    // Fisher-Yates (aka Knuth) Shuffle for a truly random order
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        // Pick a random index from 0 to i (inclusive)
+        const j = Math.floor(Math.random() * (i + 1));
+        // Swap elements array[i] and array[j]
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+    // --- END OF ADDED FUNCTION ---
+
     // Parse correct answers
+    // Note: If your {{Correct Answer}} field also has quotes, you might need a similar fix here.
+    // But usually correct answers are just letters/numbers, so this is likely fine.
     var correctAnswers = "{{Correct Answer}}".split(/<br\s*\/?>/i).filter(function(answer) {
       return answer.trim() !== '';
     });
     
-    // Check if there are any choices in the Multiple Choice field
-    var choicesContent = "{{Multiple Choice}}".trim();
+    // -------------------------------------------------------------------
+    // --- FIX START: Safely get content from HTML instead of injecting ---
+    // -------------------------------------------------------------------
+    var choicesDiv = document.getElementById('choices');
+    // We read the innerHTML directly. This handles quotes perfectly safely.
+    var choicesContent = choicesDiv ? choicesDiv.innerHTML.trim() : "";
+    
     var hasChoices = choicesContent !== '' && !/^<br\s*\/?>$/i.test(choicesContent);
+    // -------------------------------------------------------------------
+    // --- FIX END ---
+    // -------------------------------------------------------------------
     
     // Only proceed if there are choices to show
     if (hasChoices) {
       if (AUTO_SHOW_CHOICES) {
         // --- Automatically show choices ---
-        var choicesDiv = document.getElementById('choices');
         choicesDiv.style.display = 'block';
         
         // Hide the button since it's not needed
@@ -162,16 +183,22 @@ if(void 0===window.Persistence){var _persistenceKey="github.com/SimonLammer/anki
         return;
       }
 
+      // --- REVISED RANDOMIZATION LOGIC ---
+      // 1. Create a sequential array of original indices [0, 1, 2, ...]
+      data.position = Array.from({length: count}, (_, i) => i);
+      
+      // 2. Shuffle it using the robust Fisher-Yates algorithm
+      shuffleArray(data.position);
+
+      // 3. Loop through the elements to add checkboxes and event listeners
       for (let i = 0; i < count; ++i) {
         els[i].insertAdjacentHTML('afterbegin', '<input type="checkbox"> ');
         els[i].addEventListener('click', onClick, true);
         
         let input = els[i].querySelector('input');
-        input.setAttribute('idx', i);
-
-        let pos = Math.floor(Math.random() * count);
-        data.position.splice(pos, 0, i);
+        input.setAttribute('idx', i); // Set original index
       }
+      // --- END OF REVISED LOGIC ---
 
       if (Persistence.isAvailable()) {
         Persistence.setItem(data);
@@ -207,4 +234,4 @@ if(void 0===window.Persistence){var _persistenceKey="github.com/SimonLammer/anki
     // ===================================================================
 
   })();
-</script
+</script>
