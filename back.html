@@ -1,7 +1,6 @@
 <!-- Import Font Awesome using a <link> tag (more reliable in Anki) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-
 <div class="check-container"><span id="check"></span></div>
 
 <p>{{Question}}</p>
@@ -28,22 +27,12 @@
     <i class="fab fa-github"></i>
   </a>
 
-  <!-- Fiverr (SVG Replacement) -->
-  <a href="https://www.fiverr.com/s/1qZVXDr" title="Fiverr" aria-label="Fiverr">
-    <!-- Since fa-fiverr is not free, we use this SVG directly -->
-    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" style="fill: currentColor; vertical-align: -0.125em;">
-      <!-- Circle Background with 'fi' text representation -->
-      <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm-44 368h-48V208h-32v-48h32v-32c0-35.3 28.7-64 64-64h48v48h-48c-8.8 0-16 7.2-16 16v32h64v48h-64v160zm104 0h-48V160h48v208zm-24-224c-13.3 0-24-10.7-24-24s10.7-24 24-24 24 10.7 24 24-10.7 24-24 24z"/>
-    </svg>
-  </a>
-
   <!-- Reddit -->
   <a href="https://www.reddit.com/user/Useful_Disaster_7606/" title="Reddit" aria-label="Reddit">
     <i class="fab fa-reddit"></i>
   </a>
 </div>
 <!-- Social Media Buttons End Here -->
-
 <script>
 // v0.5.3 - https://github.com/SimonLammer/anki-persistence/blob/7107e73086189c190c4d326ef11ebbcded9a08c6/script.js
 if(void 0===window.Persistence){var _persistenceKey="github.com/SimonLammer/anki-persistence/",_defaultKey="_default";if(window.Persistence_sessionStorage=function(){var e=!1;try{"object"==typeof window.sessionStorage&&(e=!0,this.clear=function(){for(var e=0;e<sessionStorage.length;e++){var t=sessionStorage.key(e);0==t.indexOf(_persistenceKey)&&(sessionStorage.removeItem(t),e--)}},this.setItem=function(e,t){void 0==t&&(t=e,e=_defaultKey),sessionStorage.setItem(_persistenceKey+e,JSON.stringify(t))},this.getItem=function(e){return void 0==e&&(e=_defaultKey),JSON.parse(sessionStorage.getItem(_persistenceKey+e))},this.removeItem=function(e){void 0==e&&(e=_defaultKey),sessionStorage.removeItem(_persistenceKey+e)})}catch(e){}this.isAvailable=function(){return e}},window.Persistence_windowKey=function(e){var t=window[e],i=!1;"object"==typeof t&&(i=!0,this.clear=function(){t[_persistenceKey]={}},this.setItem=function(e,i){void 0==i&&(i=e,e=_defaultKey),t[_persistenceKey][e]=i},this.getItem=function(e){return void 0==e&&(e=_defaultKey),void 0==t[_persistenceKey][e]?null:t[_persistenceKey][e]},this.removeItem=function(e){void 0==e&&(e=_defaultKey),delete t[_persistenceKey][e]},void 0==t[_persistenceKey]&&this.clear()),this.isAvailable=function(){return i}},window.Persistence=new Persistence_sessionStorage,Persistence.isAvailable()||(window.Persistence=new Persistence_windowKey("py")),!Persistence.isAvailable()){var titleStartIndex=window.location.toString().indexOf("title"),titleContentIndex=window.location.toString().indexOf("main",titleStartIndex);titleStartIndex>0&&titleContentIndex>0&&titleContentIndex-titleStartIndex<10&&(window.Persistence=new Persistence_windowKey("qt"))}}
