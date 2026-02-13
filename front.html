@@ -1,4 +1,5 @@
 <div class="question">{{Question}}</div>
+{{tts en_US autoplay=yes:Question}}
 
 <div id="choices" class="front" style="display: none;">{{Multiple Choice}}</div>
 
@@ -22,6 +23,7 @@ if(void 0===window.Persistence){var _persistenceKey="github.com/SimonLammer/anki
 
     // Set to 'true' to show multiple choices automatically.
     // Set to 'false' to hide them behind a "Show Choices" button.
+		// If you plan to use TTS, switch this to true because if you set it false, it kind of breaks the cards
     const AUTO_SHOW_CHOICES = false;
 
     // --- KEYBINDS ---
