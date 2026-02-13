@@ -16,6 +16,7 @@ This template is designed to be highly configurable directly within the Anki car
 -   ✨ **Dynamic Choice Disabling**: Automatically prevents you from selecting more answers than the total number of correct choices, providing a subtle hint without revealing the answer.
 -   ✨ **Configurable Auto-Show**: Choose whether multiple-choice options appear immediately or are hidden behind a "Show Choices" button.
 -   ✨ **Customizable Keybinds**: Edit the keyboard shortcuts used to reveal the choices.
+-   🔊 **Text-to-Speech Support**: Optional TTS functionality for audio playback of questions and answers.
 -   **Mobile-First Design**: Looks and works great across Anki Desktop, AnkiWeb, and AnkiMobile.
 
 ## Preview
@@ -93,7 +94,55 @@ If `AUTO_SHOW_CHOICES` is set to `false`, you can edit the keybinds used to trig
 const KEY_SHOW_CHOICES = ['q', 'c'];
 ```
 
+## Text-to-Speech (TTS) Support
+
+This template supports Anki's built-in text-to-speech functionality for audio playback of card content.
+
+### Adding TTS
+
+To add text-to-speech to your cards, insert TTS tags in your templates:
+
+**Front Template:**
+```html
+<div class="question">{{Question}}</div>
+{{tts en_US:Question}}
+```
+
+**Back Template:**
+```html
+{{tts en_US:Question}}
+{{tts en_US:Correct Answer}}
+{{#Extra}}
+{{tts en_US:Extra}}
+{{/Extra}}
+```
+
+### TTS Configuration Options
+
+-   **Language**: Change `en_US` to other language codes (e.g., `ja_JP` for Japanese, `es_ES` for Spanish)
+-   **Voice**: Specify voices: `{{tts en_US voices=Apple_Samantha,Microsoft_Zira:Question}}`
+-   **Speed**: Adjust playback speed: `{{tts en_US speed=0.8:Question}}`
+
+### ⚠️ Important TTS Warnings
+
+1.  **Auto-Show Choices Required**: If you enable TTS on the front template and use `AUTO_SHOW_CHOICES = false`, Anki will automatically flip the card when the audio plays. **To prevent this, you must set `AUTO_SHOW_CHOICES = true`** in the configuration.
+
+2.  **Multiple Choice Reading Order**: TTS reads the `Multiple Choice` field content in the original order, **not** in the randomized order displayed on screen. This is because:
+    -   TTS reads directly from field content before JavaScript randomization occurs
+    -   There is no built-in way to make Anki's TTS read from dynamically shuffled content
+    
+    **Recommendation**: Only use TTS for the `Question`, `Correct Answer`, and `Extra` fields. Avoid adding TTS to the `Multiple Choice` field as it will read choices in a different order than displayed, which can be confusing.
+
+3.  **Manual Playback**: To prevent automatic card flipping entirely, you can:
+    -   Disable "Automatically play audio" in Anki settings (`Tools` → `Preferences` → `Review`)
+    -   Use `autoplay=no` parameter: `{{tts en_US autoplay=no:Question}}`
+    -   Press `R` during review to manually replay audio
+
 ## Recent Updates
+
+✨ **New: Text-to-Speech Support**
+-   Added documentation and examples for integrating Anki's TTS functionality
+-   Includes important warnings about auto-show choices compatibility and reading order limitations
 
 ✨ **New: Dynamic Choice Disabling**
 -   When a question has multiple correct answers, the template now dynamically disables unselected choices once you have selected the maximum number of correct answers. This prevents over-selecting and serves as a subtle hint about how many answers are correct.
