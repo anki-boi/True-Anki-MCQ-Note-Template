@@ -140,10 +140,6 @@ To add text-to-speech to your cards, insert TTS tags in your templates:
 
 ## Recent Updates
 
-✨ **New: Text-to-Speech Support**
--   Added documentation and examples for integrating Anki's TTS functionality
--   Includes important warnings about auto-show choices compatibility and reading order limitations
-
 ✨ **New: Dynamic Choice Disabling**
 -   When a question has multiple correct answers, the template now dynamically disables unselected choices once you have selected the maximum number of correct answers. This prevents over-selecting and serves as a subtle hint about how many answers are correct.
 
