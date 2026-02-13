@@ -7,8 +7,7 @@ html, body {
 
 .error {
   color: #F04A32;
-  font-weight: normal;
-  opacity: 0.5;
+  font-weight: bold;
 }
 
 .success {
@@ -36,7 +35,7 @@ html {
 /*  height: 95vh;  Full viewport height */
   display: flex;
   flex-direction: column;
-  font-family: Monospace, Menlo, baskerville, sans, 'Noto Sans Mono', monospace ;     
+  font-family: Menlo, Baskerville, sans-serif;    
   font-size: clamp(18px, 3vmin, 25px); /* Responsive base font */
   /*background: ;*/
   overflow: auto; /* Scroll if content overflows */
@@ -89,8 +88,11 @@ html {
   margin: 1vh 0;
   padding: 2vh 4vw;
   border-radius: 12px;
-  border: 1.2px solid rgba(253, 165, 48, 1.0);
-  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: rgba(0, 0, 0, 0.06);
+  transition: background 0.15s ease, transform 0.05s ease;
   cursor: pointer;
   display: flex; 
   align-items: center;
@@ -101,6 +103,68 @@ html {
 /*  max-width: 600px;  A pixel-based max is good for consistency */
 }
 
+#choices li:hover {
+  background: rgba(0, 0, 0, 0.10);
+}
+
+#choices li:active {
+  transform: scale(0.99);
+  background: rgba(0, 0, 0, 0.10);
+}
+
+#choices li.tap {
+  background: rgba(0, 0, 0, 0.16) !important;
+}
+
+.big-button {
+  display: block;
+  width: 100%;
+  margin: 1.5vh 0;
+  padding: 2vh 6vw;
+
+  border: none;
+  outline: none;
+  box-shadow: none;
+
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.06);
+
+  font-size: clamp(18px, 3.5vmin, 22px);
+  color: inherit;
+
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+
+  transition: background 0.15s ease, transform 0.05s ease;
+}
+
+.big-button:hover {
+  background: rgba(0, 0, 0, 0.10);
+}
+
+.big-button:active {
+  transform: scale(0.99);
+  background: rgba(0, 0, 0, 0.10);
+}
+
+.big-button.tap {
+  background: rgba(0, 0, 0, 0.16) !important;
+}
+
+#choices.back li.success {
+  color: #8AC05E !important;
+  font-weight: bold;
+}
+
+#choices.back li.error {
+  color: #F04A32 !important;
+  font-weight: bold;
+}
+
+#choices.back li.missed {
+  opacity: 0.75;
+}
 
 
 
@@ -172,9 +236,9 @@ li input {
 
 .check-container {
   position: fixed;
+  top: 0;
   left: 0;
   right: 0;
-  top: 0;
 }
 
 #check {
@@ -203,7 +267,7 @@ li input {
   font-size: clamp(16px, 2.5vh, 24px); /* Responsive font scaling */
   width: 100%;
   border: none;
-  background: rgba(253, 165, 48, 0.1); /* 70% opacity (0.7) */
+  background: rgba(0, 0, 0, 0.06);
 /*  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 6px 12px rgba(0, 0, 0, 0.2);*/
   color: black; 
   border-radius: 5px;
@@ -257,15 +321,13 @@ a { color: LightGray !important; text-decoration: none; font-size: 18px; font-st
 
 
 /* IMAGE STYLE */
-img { display: block; max-width: 100%; max-height: none; margin-left: auto; margin: 10px auto 10px auto;}
+img { display: block; max-width: 100%; margin: 10px auto;}
 
 /* --- ADDED STYLES FOR NEW INTERACTIVE FEATURES --- */
 
 /* Style for a selected answer choice */
 #choices li.selected {
-  background-color: rgba(253, 165, 48, .1); /* A light orange to indicate selection */
-  border-color: #FFB74D;
-  font-weight: bold;
+  background: rgba(0, 0, 0, 0.12);
 }
 
 /* Style for disabled (unselectable) choices when the max count is reached */
