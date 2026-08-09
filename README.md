@@ -1,3 +1,5 @@
+
+
 # True-Anki-MCQ-Note-Template
 # Advanced Multiple Choice Anki Template
 
@@ -81,7 +83,7 @@ You can control whether choices are visible immediately or hidden behind a butto
 ```javascript
 // Set to 'true' to show choices automatically.
 // Set to 'false' to hide them behind a "Show Choices" button.
-const AUTO_SHOW_CHOICES = true;
+const AUTO_SHOW_CHOICES = false;
 ```
 
 #### Customize Keybinds
