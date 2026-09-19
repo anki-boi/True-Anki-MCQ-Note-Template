@@ -7,6 +7,18 @@ This template is designed to be highly configurable directly within the Anki car
 
 ![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
+## Why this exists
+
+**Pure active recall is the gold standard for long-term retention — and the wrong tool for a multiple-choice board exam.**
+
+Anki's default is blank-page retrieval. That's the hardest, most durable form of learning, and it's the right choice when the thing you're tested on requires *producing* an answer. But most professional licensure exams — including the Philippine pharmacy board exam — are **100% multiple choice**. The exam measures **recognition**, not production. Drilling full recall for a recognition test spends the same study minute on a strictly harder task and returns **less exam-relevant yield per minute**.
+
+So this template trains recognition under exam conditions instead: you commit to a choice before anything is revealed, choice order is randomised on every rep so position carries no signal, and the back distinguishes a *wrong* pick from a *missed* correct answer — two different study signals. A dynamic selection limit tells you how many answers exist without revealing which.
+
+Familiarity with the actual question format has **higher yield** for a multiple-choice target than picture-perfect recall. That's not an argument against active recall in general — it's an argument against using the most expensive tool for a cheaper job.
+
+**→ [Read the full reasoning, and what this template deliberately does *not* do](PROBLEMS.md)**
+
 ## Features
 
 -   **Interactive Choices**: Click to select answers directly on the card.
